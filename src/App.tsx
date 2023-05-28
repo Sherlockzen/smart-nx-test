@@ -23,7 +23,7 @@ function App() {
 
   return (
     <>
-      <div className=" flex flex-col items-center w-screen h-screen">
+      <div className=" flex flex-col items-center w-screen h-screen text-yellow-400">
         <div className="navbar bg-base-300 flex justify-center">
           <a className="btn btn-ghost Uppercase text-3xl">Star Wars</a>
           <div>{currPage}</div>
@@ -34,7 +34,7 @@ function App() {
             <thead>
               <tr>
                 <th></th>
-                <th>Name</th>
+                <th className=''>Name</th>
               </tr>
             </thead>
             <tbody>
@@ -50,13 +50,13 @@ function App() {
         <div className="btn-group grid grid-cols-2">
           <button
             onClick={() => (currPage > 1 ? setCurrPage(currPage - 1) : null)}
-            className="btn btn-outline"
+            className="btn btn-outline border-yellow-400 text-yellow-400"
           >
             Previous page
           </button>
           <button
             onClick={() => finalPage === currPage ? null : setCurrPage(currPage + 1)}
-            className="btn btn-outline"
+            className="btn btn-outline border-yellow-400 text-yellow-400"
           >
             Next
           </button>
