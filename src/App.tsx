@@ -25,10 +25,8 @@ function App() {
 
   useEffect(() => {
     if (valueSearch) {
-      console.log('tem algo');
       fetch(urlSearch).then(resp => resp.json()).then((value) => setList(value))
     } else {
-      console.log('nao tem nada');
       fetch(url).then(resp => resp.json()).then((value) => setList(value))
     }
   }, [url, urlSearch])
@@ -36,18 +34,14 @@ function App() {
   const finalPage = Math.ceil(list.count / 10)
   const pagination = new Array(finalPage).fill('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     // Read the form data
     const form = e.target;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
-    console.log(formJson.search);
     setValueSearch(String(formJson.search))
   }
-
-  console.log(valueSearch);
-  
 
   return (
     <>
