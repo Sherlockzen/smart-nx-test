@@ -19,11 +19,19 @@ function App() {
     results: [],
   }
 
-  const url = 'https://swapi.dev/api/people/?page=' + currPage + (valueSearch ? '&search=' + valueSearch : '');
-  
+
+  const url = 'https://swapi.dev/api/people/?page=' + currPage;
+  const urlSearch = 'https://swapi.dev/api/people/?search=' + valueSearch;
+
   useEffect(() => {
-    fetch(url).then(resp => resp.json()).then((value) => setList(value))
-  }, [url])
+    if (valueSearch) {
+      console.log('tem algo');
+      fetch(urlSearch).then(resp => resp.json()).then((value) => setList(value))
+    } else {
+      console.log('nao tem nada');
+      fetch(url).then(resp => resp.json()).then((value) => setList(value))
+    }
+  }, [url, urlSearch])
   
   const finalPage = Math.ceil(list.count / 10)
   const pagination = new Array(finalPage).fill('')
