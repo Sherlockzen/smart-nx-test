@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useFetchAll } from './fetchApi';
+import { useFetchAll, useFetchSearch } from './fetchApi';
 import { isError, useQuery } from '@tanstack/react-query';
 
 
@@ -8,13 +8,16 @@ function App() {
   const [currPage, setCurrPage] = useState(1);
   const [valueSearch, setValueSearch] = useState('');
 
-  const query = useFetchAll(currPage)
+  const {isLoading, isError, data, error } = valueSearch === '' ? useFetchAll(currPage) : useFetchSearch(valueSearch);
+  // const {isLoading, isError, data, error } = useFetchAll(currPage);
+
+  // const {count, next, previous, results } = data 
 
   // const url = 'https://swapi.dev/api/people/?page=' + currPage;
   // const urlSearch = 'https://swapi.dev/api/people/?search=' + valueSearch;
 
 
-  console.log(query);
+  // console.log(isLoading);
   
   
   // const finalPage = Math.ceil(query.data?.count / 10)
@@ -47,12 +50,13 @@ function App() {
           <button type="submit" className=" btn btn-outline">
             Pesquisar
           </button>
+          
         </form>
 
-        {query.isLoading ? (
+        {isLoading ? (
           <div>Loading...</div>
-        ) : query.isError ? (
-          <div>Erro: {query.error.message}</div>
+        ) : isError ? (
+          <div>Erro: {error.message}</div>
         ) : (
           <div className="overflow-x-auto w-2/3">
             <table className="table w-full">
@@ -64,7 +68,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {query.data.results.map(
+                {data.results.map(
                   (person: { name: string; url: string }) => (
                     <tr key={person.name} className="hover">
                       <th>{person.url.match(/\d+/)}</th>
@@ -91,7 +95,7 @@ function App() {
               onClick={() => setCurrPage((old) => old + 1)
                 
               }
-              disabled={!query.data.next}
+              disabled={!data?.next}
               className="btn btn-outline border-yellow-400 text-yellow-400 w-40"
             >
               Next
