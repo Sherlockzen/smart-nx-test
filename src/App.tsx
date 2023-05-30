@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react'
-import { useFetchAll, useFetchSearch } from './fetchApi';
-import { isError, useQuery } from '@tanstack/react-query';
-
+import { useState } from 'react'
+// import { useFetchAll, useFetchSearch } from './fetchApi';
+import { useAllPeople } from './hooks/useAllPeople';
+import { useSearchPeople } from './hooks/useSearchPeople';
 
 function App() {
-  // const [url, setUrl] = useState('https://swapi.dev/api/people/');
   const [currPage, setCurrPage] = useState(1);
   const [valueSearch, setValueSearch] = useState('');
   const [inputSearch, setInputSearch] = useState('');
 
-  const {isLoading, data, error, isFetching } = valueSearch === '' ? useFetchAll(currPage) : useFetchSearch(valueSearch);
+  const {isLoading, data, error } = valueSearch === '' ? useAllPeople(currPage) : useSearchPeople(valueSearch);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
