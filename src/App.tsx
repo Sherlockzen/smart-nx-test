@@ -7,21 +7,9 @@ function App() {
   // const [url, setUrl] = useState('https://swapi.dev/api/people/');
   const [currPage, setCurrPage] = useState(1);
   const [valueSearch, setValueSearch] = useState('');
+  const [inputSearch, setInputSearch] = useState('');
 
-  const {isLoading, isError, data, error } = valueSearch === '' ? useFetchAll(currPage) : useFetchSearch(valueSearch);
-  // const {isLoading, isError, data, error } = useFetchAll(currPage);
-
-  // const {count, next, previous, results } = data 
-
-  // const url = 'https://swapi.dev/api/people/?page=' + currPage;
-  // const urlSearch = 'https://swapi.dev/api/people/?search=' + valueSearch;
-
-
-  // console.log(isLoading);
-  
-  
-  // const finalPage = Math.ceil(query.data?.count / 10)
-  // const pagination = new Array(finalPage).fill('')
+  const {isLoading, data, error, isFetching } = valueSearch === '' ? useFetchAll(currPage) : useFetchSearch(valueSearch);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -32,31 +20,48 @@ function App() {
     setValueSearch(String(formJson.search))
   }
 
+  const clearSearch = () => {
+    setInputSearch('');
+    setValueSearch('');
+  }
+
   return (
     <>
       <div className=" flex flex-col items-center w-screen h-screen text-yellow-400 gap-4">
         <div className="navbar bg-base-300 flex justify-center">
           <a className="btn btn-ghost Uppercase text-3xl">Star Wars</a>
-          <div>{currPage}</div>
+          {/* <div>{currPage}</div> */}
         </div>
 
-        <form method="post" onSubmit={handleSubmit} className="flex gap-5">
-          <input
-            name="search"
-            type="text"
-            placeholder="Search"
-            className="input input-bordered"
-          />
-          <button type="submit" className=" btn btn-outline">
-            Pesquisar
+        <div className=' flex gap-4'>
+          <form method="post" onSubmit={handleSubmit} className="flex gap-5">
+            <input
+              value={inputSearch}
+              onChange={(e) => setInputSearch(e.target.value)}
+              name="search"
+              type="text"
+              placeholder="Search"
+              className="input input-bordered"
+            />
+            <button type="submit" className=" btn btn-outline">
+              Pesquisar
+            </button>
+          </form>
+          <button
+            onClick={clearSearch}
+            className=' btn btn-outline'>
+            Limpar Pesquisa
           </button>
-          
-        </form>
+        </div>
 
         {isLoading ? (
-          <div>Loading...</div>
-        ) : isError ? (
-          <div>Erro: {error.message}</div>
+          <progress className="progress progress-warning w-72 bg-neutral m-10"></progress>
+        ) : (error instanceof Error) ? (
+          <div>Erro: 
+            {
+              error.message
+            }
+          </div>
         ) : (
           <div className="overflow-x-auto w-2/3">
             <table className="table w-full">
@@ -85,7 +90,7 @@ function App() {
           <div>
             <button
               onClick={() => setCurrPage((old) => Math.max(old - 1, 0))}
-              disabled={currPage === 1}
+              disabled={!data?.previous}
               className="btn btn-outline border-yellow-400 text-yellow-400 w-40"
             >
               Previous
@@ -95,7 +100,7 @@ function App() {
               onClick={() => setCurrPage((old) => old + 1)
                 
               }
-              disabled={!data?.next}
+              disabled={!data?.next || (error instanceof Error)}
               className="btn btn-outline border-yellow-400 text-yellow-400 w-40"
             >
               Next
