@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
-export function useFetchAll(page = 1) {
+export function useAllPeople(page = 1) {
     return useQuery({
         queryKey: ['people', page],
         queryFn: async () => {

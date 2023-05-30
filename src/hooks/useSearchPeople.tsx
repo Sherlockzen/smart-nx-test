@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
-export function useFetchSearch(search = '') {
+export function useSearchPeople(search = '') {
     return useQuery({
         queryKey: ['people', search],
         queryFn: async () => {
